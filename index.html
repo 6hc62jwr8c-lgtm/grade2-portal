@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f7f7f5">
+<title>2年生 統合プロジェクト｜iPhoneデモ</title>
+<style>
+  :root{
+    --bg:#f7f7f5; --card:#ffffff; --text:#202124; --muted:#6b7280;
+    --line:#d9dde3; --soft:#eef1f4; --accent:#222;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic UI","Yu Gothic","Meiryo",sans-serif}
+  body{min-height:100vh}
+  .app{
+    width:100%;
+    max-width:430px;
+    margin:0 auto;
+    min-height:100vh;
+    background:var(--bg);
+    padding:calc(env(safe-area-inset-top) + 12px) 14px calc(env(safe-area-inset-bottom) + 22px);
+  }
+  .topbar{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:12px;
+  }
+  .title{font-weight:800;font-size:18px}
+  .badge{font-size:11px;color:var(--muted);background:var(--soft);padding:5px 8px;border-radius:999px}
+  .screen{display:none}
+  .screen.active{display:block}
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:20px;
+    padding:18px; box-shadow:0 2px 10px rgba(0,0,0,.04);
+  }
+  h1{font-size:24px;line-height:1.35;margin:0 0 8px}
+  h2{font-size:21px;line-height:1.4;margin:0 0 8px}
+  .lead{font-size:14px;line-height:1.6;color:var(--muted);margin:0 0 18px}
+  .menu{display:grid;gap:12px}
+  button{
+    font:inherit;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .bigbtn,.choice{
+    width:100%; text-align:left; border:1px solid var(--line); background:#fff;
+    border-radius:16px; padding:17px 16px; min-height:68px;
+    font-weight:800; font-size:17px; cursor:pointer;
+  }
+  .sub{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-top:4px;line-height:1.45}
+  .stepmeta{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .steptext{font-size:12px;color:var(--muted)}
+  .stepper{display:flex;align-items:center;gap:5px;margin-bottom:16px}
+  .dot{
+    width:22px;height:22px;border-radius:50%;display:grid;place-items:center;
+    border:1px solid var(--line);background:#fff;color:var(--muted);font-size:11px;font-weight:800;flex:0 0 auto
+  }
+  .dot.on{background:#222;color:#fff;border-color:#222}
+  .bar{height:2px;flex:1;background:var(--line)}
+  .bar.on{background:#222}
+  label{display:block;font-weight:800;font-size:14px;margin:14px 0 7px}
+  input,select,textarea{
+    width:100%;border:1px solid var(--line);border-radius:14px;
+    padding:14px 13px;font-size:16px;background:#fff;min-height:50px;
+  }
+  textarea{min-height:120px;resize:vertical}
+  .summary{
+    background:var(--soft);border-radius:14px;padding:14px;font-size:14px;line-height:1.75;margin-top:12px
+  }
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 12px;font-size:13px}
+  .actions{
+    display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px
+  }
+  .actions.single{grid-template-columns:1fr}
+  .btn{
+    border:1px solid var(--line);background:#fff;border-radius:14px;padding:14px 12px;min-height:50px;font-weight:800
+  }
+  .btn.primary{background:#222;color:#fff;border-color:#222}
+  .sticky{
+    position:sticky; bottom:calc(env(safe-area-inset-bottom) + 8px);
+    margin-top:18px;
+  }
+  .mini{font-size:12px;line-height:1.55;color:var(--muted);margin-top:10px}
+  .homeRow{margin-top:12px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="title">2年生 統合プロジェクト</div>
+    <div class="badge">iPhoneデモ</div>
+  </div>
+
+  <section id="home" class="screen active">
+    <div class="card">
+      <h1>今日は何をしますか？</h1>
+      <p class="lead">親指だけで進められるように、最初は3つだけにしています。</p>
+      <div class="menu">
+        <button class="bigbtn" onclick="go('planMode')">予定を入れる・変更する<span class="sub">行事・時間割変更・授業のずれ</span></button>
+        <button class="bigbtn" onclick="go('product')">日案・連絡帳・音読カードを作る<span class="sub">必要な成果物を選んで作成</span></button>
+        <button class="bigbtn" onclick="go('consult')">その他・困ったことを相談する<span class="sub">細かい変更・イレギュラー</span></button>
+      </div>
+    </div>
+  </section>
+
+  <section id="planMode" class="screen">
+    <div class="card">
+      <div class="stepmeta"><div class="steptext">予定 1 / 5</div><div class="steptext">あと4</div></div>
+      <div class="stepper"><div class="dot on">1</div><div class="bar"></div><div class="dot">2</div><div class="bar"></div><div class="dot">3</div><div class="bar"></div><div class="dot">4</div><div class="bar"></div><div class="dot">5</div></div>
+      <h2>何をしますか？</h2>
+      <div class="menu">
+        <button class="choice" onclick="setPlanMode('new');go('planWhen')">新しく予定を入れる</button>
+        <button class="choice" onclick="setPlanMode('change');go('planWhen')">予定を変更する</button>
+      </div>
+      <div class="actions single"><button class="btn" onclick="go('home')">← 最初に戻る</button></div>
+    </div>
+  </section>
+
+  <section id="planWhen" class="screen">
+    <div class="card">
+      <div class="stepmeta"><div class="steptext">予定 2 / 5</div><div class="steptext">あと3</div></div>
+      <div class="stepper"><div class="dot on">1</div><div class="bar on"></div><div class="dot on">2</div><div class="bar"></div><div class="dot">3</div><div class="bar"></div><div class="dot">4</div><div class="bar"></div><div class="dot">5</div></div>
+      <h2>いつですか？</h2>
+      <label>日付</label>
+      <input id="date" type="date" value="2026-10-01">
+      <label>時間</label>
+      <select id="period">
+        <option>1時間目</option><option>2時間目</option><option selected>3時間目</option>
+        <option>4時間目</option><option>5時間目</option><option>放課後</option>
+      </select>
+      <label>内容</label>
+      <input id="event" value="行事のため国語を実施しない">
+      <div class="chips">
+        <button class="chip">写真から取り込む</button>
+        <button class="chip">時間割表から選ぶ</button>
+      </div>
+      <div class="sticky">
+        <div class="actions">
+          <button class="btn" onclick="go('planMode')">戻る</button>
+          <button class="btn primary" onclick="go('planImpact')">次へ</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="planImpact" class="screen">
+    <div class="card">
+      <div class="stepmeta"><div class="steptext">予定 3 / 5</div><div class="steptext">あと2</div></div>
+      <div class="stepper"><div class="dot on">1</div><div class="bar on"></div><div class="dot on">2</div><div class="bar on"></div><div class="dot on">3</div><div class="bar"></div><div class="dot">4</div><div class="bar"></div><div class="dot">5</div></div>
+      <h2>影響を整理しました</h2>
+      <p class="lead">こちらで判断できる所は先に処理し、必要な所だけ先生に聞きます。</p>
+      <div class="summary">
+        ① 国語の進度：1時間後ろへずらす案<br>
+        ② 後続の日案：連動可能<br>
+        ③ 連絡帳：変更内容を反映可能<br>
+        ④ 宿題・音読カード：確認が必要
+      </div>
+      <div class="sticky">
+        <div class="actions">
+          <button class="btn" onclick="go('planWhen')">戻る</button>
+          <button class="btn primary" onclick="go('planQuestions')">必要な確認へ</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="planQuestions" class="screen">
+    <div class="card">
+      <div class="stepmeta"><div class="steptext">予定 4 / 5</div><div class="steptext">あと1</div></div>
+      <div class="stepper"><div class="dot on">1</div><div class="bar on"></div><div class="dot on">2</div><div class="bar on"></div><div class="dot on">3</div><div class="bar on"></div><div class="dot on">4</div><div class="bar"></div><div class="dot">5</div></div>
+      <h2>2点だけ確認します</h2>
+      <label>宿題</label>
+      <select id="homework">
+        <option selected>進度に合わせて変更する</option>
+        <option>そのまま</option>
+        <option>今回は出さない</option>
+        <option>相談して決める</option>
+      </select>
+      <label>音読カード</label>
+      <select id="ondoku">
+        <option selected>進度に合わせて変更する</option>
+        <option>そのまま</option>
+        <option>今回は使わない</option>
+        <option>相談して決める</option>
+      </select>
+      <p class="mini">本番では、変更内容によって質問自体を出し分けます。</p>
+      <div class="sticky">
+        <div class="actions">
+          <button class="btn" onclick="go('planImpact')">戻る</button>
+          <button class="btn primary" onclick="fillPlanConfirm();go('planConfirm')">最終確認へ</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="planConfirm" class="screen">
+    <div class="card">
+      <div class="stepmeta"><div class="steptext">予定 5 / 5</div><div class="steptext">完了直前</div></div>
+      <div class="stepper"><div class="dot on">1</div><div class="bar on"></div><div class="dot on">2</div><div class="bar on"></div><div class="dot on">3</div><div class="bar on"></div><div class="dot on">4</div><div class="bar on"></div><div class="dot on">5</div></div>
+      <h2>この内容で反映しますか？</h2>
+      <div id="planConfirmText" class="summary"></div>
+      <div class="sticky">
+        <div class="actions">
+          <button class="btn" onclick="go('planQuestions')">修正する</button>
+          <button class="btn primary" onclick="alert('デモ：ここで先生のOK後に反映します。')">OK・反映する</button>
+        </div>
+      </div>
+      <div class="homeRow"><button class="btn" style="width:100%" onclick="go('home')">最初に戻る</button></div>
+    </div>
+  </section>
+
+  <section id="product" class="screen">
+    <div class="card">
+      <div class="stepmeta"><div class="steptext">成果物 1 / 4</div><div class="steptext">あと3</div></div>
+      <div class="stepper"><div class="dot on">1</div><div class="bar"></div><div class="dot">2</div><div class="bar"></div><div class="dot">3</div><div class="bar"></div><div class="dot">4</div></div>
+      <h2>何を作りますか？</h2>
+      <div class="menu">
+        <button class="choice" onclick="setProduct('日案');go('productDate')">日案を作る</button>
+        <button class="choice" onclick="setProduct('連絡帳');go('productDate')">連絡帳を作る</button>
+        <button class="choice" onclick="setProduct('音読カード');go('productDate')">音読カードを作る</button>
+      </div>
+      <div class="actions single"><button class="btn" onclick="go('home')">← 最初に戻る</button></div>
+    </div>
+  </section>
+
+  <section id="productDate" class="screen">
+    <div class="card">
+      <div class="stepmeta"><div class="steptext">成果物 2 / 4</div><div class="steptext">あと2</div></div>
+      <div class="stepper"><div class="dot on">1</div><div class="bar on"></div><div class="dot on">2</div><div class="bar"></div><div class="dot">3</div><div class="bar"></div><div class="dot">4</div></div>
+      <h2><span id="productName">日案</span>をいつの分で作りますか？</h2>
+      <label>対象日</label>
+      <input id="productDateInput" type="date" value="2026-10-01">
+      <div class="sticky">
+        <div class="actions">
+          <button class="btn" onclick="go('product')">戻る</button>
+          <button class="btn primary" onclick="go('productCheck')">次へ</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="productCheck" class="screen">
+    <div class="card">
+      <div class="stepmeta"><div class="steptext">成果物 3 / 4</div><div class="steptext">あと1</div></div>
+      <div class="stepper"><div class="dot on">1</div><div class="bar on"></div><div class="dot on">2</div><div class="bar on"></div><div class="dot on">3</div><div class="bar"></div><div class="dot">4</div></div>
+      <h2>必要な情報を確認しました</h2>
+      <div class="summary">
+        ✓ 時間割：登録済み<br>
+        ✓ 行事・予定：登録済み<br>
+        ✓ 現在の進度：確認済み<br>
+        ✓ 宿題：確認済み<br>
+        ✓ 教材：2年生の共通教材を使用
+      </div>
+      <p class="mini">不足がある時だけ追加質問を出します。</p>
+      <div class="sticky">
+        <div class="actions">
+          <button class="btn" onclick="go('productDate')">戻る</button>
+          <button class="btn primary" onclick="fillProductConfirm();go('productConfirm')">最終確認へ</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="productConfirm" class="screen">
+    <div class="card">
+      <div class="stepmeta"><div class="steptext">成果物 4 / 4</div><div class="steptext">完了直前</div></div>
+      <div class="stepper"><div class="dot on">1</div><div class="bar on"></div><div class="dot on">2</div><div class="bar on"></div><div class="dot on">3</div><div class="bar on"></div><div class="dot on">4</div></div>
+      <h2>この内容で作りますか？</h2>
+      <div id="productConfirmText" class="summary"></div>
+      <div class="sticky">
+        <div class="actions">
+          <button class="btn" onclick="go('productCheck')">修正する</button>
+          <button class="btn primary" onclick="alert('デモ：ここで先生のOK後に作成します。')">OK・作成する</button>
+        </div>
+      </div>
+      <div class="homeRow"><button class="btn" style="width:100%" onclick="go('home')">最初に戻る</button></div>
+    </div>
+  </section>
+
+  <section id="consult" class="screen">
+    <div class="card">
+      <h2>その他・困ったことを相談する</h2>
+      <p class="lead">使い慣れていない先生でも入りやすいように、例だけ出しています。</p>
+      <div class="chips">
+        <button class="chip" onclick="prefill('文言や見た目を少し変えたい')">文言・見た目</button>
+        <button class="chip" onclick="prefill('授業が飛んだ後の戻し方を相談したい')">授業のずれ</button>
+        <button class="chip" onclick="prefill('いつもと違う処理をしたい')">いつもと違うこと</button>
+      </div>
+      <label>相談内容</label>
+      <textarea id="consultText" placeholder="困っていることを、そのまま入力"></textarea>
+      <div class="sticky">
+        <div class="actions">
+          <button class="btn" onclick="go('home')">戻る</button>
+          <button class="btn primary" onclick="alert('デモ：ここから会話で調整します。')">相談する</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+let planMode='change', product='日案';
+
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,left:0,behavior:'instant'});
+}
+function setPlanMode(v){planMode=v}
+function setProduct(v){product=v;document.getElementById('productName').textContent=v}
+function prefill(v){document.getElementById('consultText').value=v}
+function fillPlanConfirm(){
+  const mode = planMode==='new' ? '新しく予定を入れる' : '予定を変更する';
+  const date=document.getElementById('date').value;
+  const period=document.getElementById('period').value;
+  const event=document.getElementById('event').value;
+  const homework=document.getElementById('homework').value;
+  const ondoku=document.getElementById('ondoku').value;
+  document.getElementById('planConfirmText').innerHTML =
+    '操作：'+mode+'<br>'+
+    '日付：'+date+'<br>'+
+    '時間：'+period+'<br>'+
+    '内容：'+event+'<br>'+
+    '進度：1時間後ろへずらす案<br>'+
+    '宿題：'+homework+'<br>'+
+    '音読カード：'+ondoku+'<br>'+
+    '日案・連絡帳：変更内容を反映';
+}
+function fillProductConfirm(){
+  const date=document.getElementById('productDateInput').value;
+  document.getElementById('productConfirmText').innerHTML =
+    '作成物：'+product+'<br>'+
+    '対象日：'+date+'<br>'+
+    '予定・時間割・進度・宿題を反映<br>'+
+    '2年生の共通教材を参照<br>'+
+    '先生のOK後に作成';
+}
+</script>
+</body>
+</html>
