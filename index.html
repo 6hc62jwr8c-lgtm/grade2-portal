@@ -1,342 +1,83 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#f7f7f5">
-<title>2年生 統合プロジェクト｜iPhoneデモ</title>
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>2年生 統合ポータル｜操作デモ v4</title>
 <style>
-  :root{
-    --bg:#f7f7f5; --card:#ffffff; --text:#202124; --muted:#6b7280;
-    --line:#d9dde3; --soft:#eef1f4; --accent:#222;
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic UI","Yu Gothic","Meiryo",sans-serif}
-  body{min-height:100vh}
-  .app{
-    width:100%;
-    max-width:430px;
-    margin:0 auto;
-    min-height:100vh;
-    background:var(--bg);
-    padding:calc(env(safe-area-inset-top) + 12px) 14px calc(env(safe-area-inset-bottom) + 22px);
-  }
-  .topbar{
-    display:flex;justify-content:space-between;align-items:center;
-    margin-bottom:12px;
-  }
-  .title{font-weight:800;font-size:18px}
-  .badge{font-size:11px;color:var(--muted);background:var(--soft);padding:5px 8px;border-radius:999px}
-  .screen{display:none}
-  .screen.active{display:block}
-  .card{
-    background:var(--card); border:1px solid var(--line); border-radius:20px;
-    padding:18px; box-shadow:0 2px 10px rgba(0,0,0,.04);
-  }
-  h1{font-size:24px;line-height:1.35;margin:0 0 8px}
-  h2{font-size:21px;line-height:1.4;margin:0 0 8px}
-  .lead{font-size:14px;line-height:1.6;color:var(--muted);margin:0 0 18px}
-  .menu{display:grid;gap:12px}
-  button{
-    font:inherit;
-    -webkit-tap-highlight-color:transparent;
-  }
-  .bigbtn,.choice{
-    width:100%; text-align:left; border:1px solid var(--line); background:#fff;
-    border-radius:16px; padding:17px 16px; min-height:68px;
-    font-weight:800; font-size:17px; cursor:pointer;
-  }
-  .sub{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-top:4px;line-height:1.45}
-  .stepmeta{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-  .steptext{font-size:12px;color:var(--muted)}
-  .stepper{display:flex;align-items:center;gap:5px;margin-bottom:16px}
-  .dot{
-    width:22px;height:22px;border-radius:50%;display:grid;place-items:center;
-    border:1px solid var(--line);background:#fff;color:var(--muted);font-size:11px;font-weight:800;flex:0 0 auto
-  }
-  .dot.on{background:#222;color:#fff;border-color:#222}
-  .bar{height:2px;flex:1;background:var(--line)}
-  .bar.on{background:#222}
-  label{display:block;font-weight:800;font-size:14px;margin:14px 0 7px}
-  input,select,textarea{
-    width:100%;border:1px solid var(--line);border-radius:14px;
-    padding:14px 13px;font-size:16px;background:#fff;min-height:50px;
-  }
-  textarea{min-height:120px;resize:vertical}
-  .summary{
-    background:var(--soft);border-radius:14px;padding:14px;font-size:14px;line-height:1.75;margin-top:12px
-  }
-  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-  .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 12px;font-size:13px}
-  .actions{
-    display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px
-  }
-  .actions.single{grid-template-columns:1fr}
-  .btn{
-    border:1px solid var(--line);background:#fff;border-radius:14px;padding:14px 12px;min-height:50px;font-weight:800
-  }
-  .btn.primary{background:#222;color:#fff;border-color:#222}
-  .sticky{
-    position:sticky; bottom:calc(env(safe-area-inset-bottom) + 8px);
-    margin-top:18px;
-  }
-  .mini{font-size:12px;line-height:1.55;color:var(--muted);margin-top:10px}
-  .homeRow{margin-top:12px}
-</style>
-</head>
-<body>
-<div class="app">
-  <div class="topbar">
-    <div class="title">2年生 統合プロジェクト</div>
-    <div class="badge">iPhoneデモ</div>
-  </div>
-
-  <section id="home" class="screen active">
-    <div class="card">
-      <h1>今日は何をしますか？</h1>
-      <p class="lead">親指だけで進められるように、最初は3つだけにしています。</p>
-      <div class="menu">
-        <button class="bigbtn" onclick="go('planMode')">予定を入れる・変更する<span class="sub">行事・時間割変更・授業のずれ</span></button>
-        <button class="bigbtn" onclick="go('product')">日案・連絡帳・音読カードを作る<span class="sub">必要な成果物を選んで作成</span></button>
-        <button class="bigbtn" onclick="go('consult')">その他・困ったことを相談する<span class="sub">細かい変更・イレギュラー</span></button>
-      </div>
-    </div>
-  </section>
-
-  <section id="planMode" class="screen">
-    <div class="card">
-      <div class="stepmeta"><div class="steptext">予定 1 / 5</div><div class="steptext">あと4</div></div>
-      <div class="stepper"><div class="dot on">1</div><div class="bar"></div><div class="dot">2</div><div class="bar"></div><div class="dot">3</div><div class="bar"></div><div class="dot">4</div><div class="bar"></div><div class="dot">5</div></div>
-      <h2>何をしますか？</h2>
-      <div class="menu">
-        <button class="choice" onclick="setPlanMode('new');go('planWhen')">新しく予定を入れる</button>
-        <button class="choice" onclick="setPlanMode('change');go('planWhen')">予定を変更する</button>
-      </div>
-      <div class="actions single"><button class="btn" onclick="go('home')">← 最初に戻る</button></div>
-    </div>
-  </section>
-
-  <section id="planWhen" class="screen">
-    <div class="card">
-      <div class="stepmeta"><div class="steptext">予定 2 / 5</div><div class="steptext">あと3</div></div>
-      <div class="stepper"><div class="dot on">1</div><div class="bar on"></div><div class="dot on">2</div><div class="bar"></div><div class="dot">3</div><div class="bar"></div><div class="dot">4</div><div class="bar"></div><div class="dot">5</div></div>
-      <h2>いつですか？</h2>
-      <label>日付</label>
-      <input id="date" type="date" value="2026-10-01">
-      <label>時間</label>
-      <select id="period">
-        <option>1時間目</option><option>2時間目</option><option selected>3時間目</option>
-        <option>4時間目</option><option>5時間目</option><option>放課後</option>
-      </select>
-      <label>内容</label>
-      <input id="event" value="行事のため国語を実施しない">
-      <div class="chips">
-        <button class="chip">写真から取り込む</button>
-        <button class="chip">時間割表から選ぶ</button>
-      </div>
-      <div class="sticky">
-        <div class="actions">
-          <button class="btn" onclick="go('planMode')">戻る</button>
-          <button class="btn primary" onclick="go('planImpact')">次へ</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="planImpact" class="screen">
-    <div class="card">
-      <div class="stepmeta"><div class="steptext">予定 3 / 5</div><div class="steptext">あと2</div></div>
-      <div class="stepper"><div class="dot on">1</div><div class="bar on"></div><div class="dot on">2</div><div class="bar on"></div><div class="dot on">3</div><div class="bar"></div><div class="dot">4</div><div class="bar"></div><div class="dot">5</div></div>
-      <h2>影響を整理しました</h2>
-      <p class="lead">こちらで判断できる所は先に処理し、必要な所だけ先生に聞きます。</p>
-      <div class="summary">
-        ① 国語の進度：1時間後ろへずらす案<br>
-        ② 後続の日案：連動可能<br>
-        ③ 連絡帳：変更内容を反映可能<br>
-        ④ 宿題・音読カード：確認が必要
-      </div>
-      <div class="sticky">
-        <div class="actions">
-          <button class="btn" onclick="go('planWhen')">戻る</button>
-          <button class="btn primary" onclick="go('planQuestions')">必要な確認へ</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="planQuestions" class="screen">
-    <div class="card">
-      <div class="stepmeta"><div class="steptext">予定 4 / 5</div><div class="steptext">あと1</div></div>
-      <div class="stepper"><div class="dot on">1</div><div class="bar on"></div><div class="dot on">2</div><div class="bar on"></div><div class="dot on">3</div><div class="bar on"></div><div class="dot on">4</div><div class="bar"></div><div class="dot">5</div></div>
-      <h2>2点だけ確認します</h2>
-      <label>宿題</label>
-      <select id="homework">
-        <option selected>進度に合わせて変更する</option>
-        <option>そのまま</option>
-        <option>今回は出さない</option>
-        <option>相談して決める</option>
-      </select>
-      <label>音読カード</label>
-      <select id="ondoku">
-        <option selected>進度に合わせて変更する</option>
-        <option>そのまま</option>
-        <option>今回は使わない</option>
-        <option>相談して決める</option>
-      </select>
-      <p class="mini">本番では、変更内容によって質問自体を出し分けます。</p>
-      <div class="sticky">
-        <div class="actions">
-          <button class="btn" onclick="go('planImpact')">戻る</button>
-          <button class="btn primary" onclick="fillPlanConfirm();go('planConfirm')">最終確認へ</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="planConfirm" class="screen">
-    <div class="card">
-      <div class="stepmeta"><div class="steptext">予定 5 / 5</div><div class="steptext">完了直前</div></div>
-      <div class="stepper"><div class="dot on">1</div><div class="bar on"></div><div class="dot on">2</div><div class="bar on"></div><div class="dot on">3</div><div class="bar on"></div><div class="dot on">4</div><div class="bar on"></div><div class="dot on">5</div></div>
-      <h2>この内容で反映しますか？</h2>
-      <div id="planConfirmText" class="summary"></div>
-      <div class="sticky">
-        <div class="actions">
-          <button class="btn" onclick="go('planQuestions')">修正する</button>
-          <button class="btn primary" onclick="alert('デモ：ここで先生のOK後に反映します。')">OK・反映する</button>
-        </div>
-      </div>
-      <div class="homeRow"><button class="btn" style="width:100%" onclick="go('home')">最初に戻る</button></div>
-    </div>
-  </section>
-
-  <section id="product" class="screen">
-    <div class="card">
-      <div class="stepmeta"><div class="steptext">成果物 1 / 4</div><div class="steptext">あと3</div></div>
-      <div class="stepper"><div class="dot on">1</div><div class="bar"></div><div class="dot">2</div><div class="bar"></div><div class="dot">3</div><div class="bar"></div><div class="dot">4</div></div>
-      <h2>何を作りますか？</h2>
-      <div class="menu">
-        <button class="choice" onclick="setProduct('日案');go('productDate')">日案を作る</button>
-        <button class="choice" onclick="setProduct('連絡帳');go('productDate')">連絡帳を作る</button>
-        <button class="choice" onclick="setProduct('音読カード');go('productDate')">音読カードを作る</button>
-      </div>
-      <div class="actions single"><button class="btn" onclick="go('home')">← 最初に戻る</button></div>
-    </div>
-  </section>
-
-  <section id="productDate" class="screen">
-    <div class="card">
-      <div class="stepmeta"><div class="steptext">成果物 2 / 4</div><div class="steptext">あと2</div></div>
-      <div class="stepper"><div class="dot on">1</div><div class="bar on"></div><div class="dot on">2</div><div class="bar"></div><div class="dot">3</div><div class="bar"></div><div class="dot">4</div></div>
-      <h2><span id="productName">日案</span>をいつの分で作りますか？</h2>
-      <label>対象日</label>
-      <input id="productDateInput" type="date" value="2026-10-01">
-      <div class="sticky">
-        <div class="actions">
-          <button class="btn" onclick="go('product')">戻る</button>
-          <button class="btn primary" onclick="go('productCheck')">次へ</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="productCheck" class="screen">
-    <div class="card">
-      <div class="stepmeta"><div class="steptext">成果物 3 / 4</div><div class="steptext">あと1</div></div>
-      <div class="stepper"><div class="dot on">1</div><div class="bar on"></div><div class="dot on">2</div><div class="bar on"></div><div class="dot on">3</div><div class="bar"></div><div class="dot">4</div></div>
-      <h2>必要な情報を確認しました</h2>
-      <div class="summary">
-        ✓ 時間割：登録済み<br>
-        ✓ 行事・予定：登録済み<br>
-        ✓ 現在の進度：確認済み<br>
-        ✓ 宿題：確認済み<br>
-        ✓ 教材：2年生の共通教材を使用
-      </div>
-      <p class="mini">不足がある時だけ追加質問を出します。</p>
-      <div class="sticky">
-        <div class="actions">
-          <button class="btn" onclick="go('productDate')">戻る</button>
-          <button class="btn primary" onclick="fillProductConfirm();go('productConfirm')">最終確認へ</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="productConfirm" class="screen">
-    <div class="card">
-      <div class="stepmeta"><div class="steptext">成果物 4 / 4</div><div class="steptext">完了直前</div></div>
-      <div class="stepper"><div class="dot on">1</div><div class="bar on"></div><div class="dot on">2</div><div class="bar on"></div><div class="dot on">3</div><div class="bar on"></div><div class="dot on">4</div></div>
-      <h2>この内容で作りますか？</h2>
-      <div id="productConfirmText" class="summary"></div>
-      <div class="sticky">
-        <div class="actions">
-          <button class="btn" onclick="go('productCheck')">修正する</button>
-          <button class="btn primary" onclick="alert('デモ：ここで先生のOK後に作成します。')">OK・作成する</button>
-        </div>
-      </div>
-      <div class="homeRow"><button class="btn" style="width:100%" onclick="go('home')">最初に戻る</button></div>
-    </div>
-  </section>
-
-  <section id="consult" class="screen">
-    <div class="card">
-      <h2>その他・困ったことを相談する</h2>
-      <p class="lead">使い慣れていない先生でも入りやすいように、例だけ出しています。</p>
-      <div class="chips">
-        <button class="chip" onclick="prefill('文言や見た目を少し変えたい')">文言・見た目</button>
-        <button class="chip" onclick="prefill('授業が飛んだ後の戻し方を相談したい')">授業のずれ</button>
-        <button class="chip" onclick="prefill('いつもと違う処理をしたい')">いつもと違うこと</button>
-      </div>
-      <label>相談内容</label>
-      <textarea id="consultText" placeholder="困っていることを、そのまま入力"></textarea>
-      <div class="sticky">
-        <div class="actions">
-          <button class="btn" onclick="go('home')">戻る</button>
-          <button class="btn primary" onclick="alert('デモ：ここから会話で調整します。')">相談する</button>
-        </div>
-      </div>
-    </div>
-  </section>
-</div>
-
-<script>
-let planMode='change', product='日案';
-
-function go(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo({top:0,left:0,behavior:'instant'});
+:root{--bg:#f6f7f6;--ink:#202725;--muted:#65716a;--border:#dce3dd;--light:#eef3ef;--dark:#244b3b;--white:#fff;--warning:#fff5df}*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif;font-size:16px}button,input,textarea,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:transparent}main{max-width:460px;margin:auto;min-height:100vh;padding:calc(env(safe-area-inset-top) + 15px) 14px calc(env(safe-area-inset-bottom) + 34px)}header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px}header b{font-size:17px}.badge{font-size:11px;color:var(--dark);background:#e4efe7;border-radius:30px;padding:6px 9px}.screen{display:none}.screen.active{display:block}.card{background:#fff;border:1px solid var(--border);border-radius:19px;padding:18px;box-shadow:0 2px 8px #223c2a09}h1{font-size:24px;margin:0 0 9px}h2{font-size:21px;line-height:1.45;margin:0 0 12px}h3{font-size:16px;margin:22px 0 8px}.lead{font-size:14px;color:var(--muted);line-height:1.6;margin:0 0 18px}.stack{display:grid;gap:10px}.tile,.selectbtn{display:block;width:100%;min-height:63px;text-align:left;background:white;border:1px solid var(--border);border-radius:14px;padding:15px;font-weight:750;color:var(--ink)}.tile small{display:block;font-weight:450;color:var(--muted);font-size:12px;margin-top:5px;line-height:1.5}.tile.selected,.selectbtn.selected{background:var(--dark);color:white;border-color:var(--dark)}.tile.selected small{color:#e4ece6}.steps{display:flex;align-items:center;gap:5px;margin:2px 0 18px}.ball{display:grid;place-items:center;border:1px solid var(--border);color:var(--muted);background:white;border-radius:50%;height:22px;width:22px;flex-shrink:0;font-size:11px;font-weight:bold}.ball.on{color:#fff;background:var(--dark);border-color:var(--dark)}.line{height:2px;background:var(--border);flex:1}.line.on{background:var(--dark)}.step-caption{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-bottom:8px}.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.subject{min-width:0;min-height:54px;border:1px solid var(--border);border-radius:12px;background:white;font-size:14px;font-weight:700;padding:8px 4px;line-height:1.3}.subject.on{color:white;background:var(--dark);border-color:var(--dark)}label{display:block;font-size:14px;font-weight:750;margin:15px 0 7px}input,select,textarea{width:100%;min-width:0;max-width:100%;min-height:48px;border:1px solid var(--border);border-radius:12px;padding:11px;background:#fff;font-size:16px;color:var(--ink)}input[type=date]{-webkit-appearance:none;appearance:none;min-width:0;width:100%}textarea{min-height:100px;resize:vertical}.note{padding:13px;background:var(--light);border-radius:13px;line-height:1.65;font-size:14px;margin:12px 0}.warn{background:var(--warning)}.muted{font-size:12px;color:var(--muted);line-height:1.55}.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:18px}.actions.one{grid-template-columns:1fr}.btn{min-height:48px;border:1px solid var(--border);background:#fff;border-radius:12px;padding:11px;font-weight:750}.btn.primary{background:var(--dark);color:#fff;border-color:var(--dark)}.btn.ghost{background:var(--light)}.option{display:flex;gap:10px;align-items:center;padding:12px;border:1px solid var(--border);border-radius:12px;margin-top:8px;cursor:pointer;font-size:14px}.option input{width:18px;height:18px;min-height:18px;flex:0 0 18px;accent-color:var(--dark)}.tag{display:inline-block;padding:4px 7px;border-radius:7px;background:var(--light);font-size:12px;color:var(--dark)}.tablewrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px;margin-top:10px}table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:10px 7px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}th{background:var(--light);white-space:nowrap}tr:last-child td{border-bottom:0}.tabs{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.tabs button{background:white;border:1px solid var(--border);border-radius:999px;padding:9px 12px;font-size:13px}.tabs button.on{background:var(--dark);color:#fff}.progress{display:grid;gap:9px;margin-top:15px}.progress div{padding:10px 12px;background:var(--light);border-radius:10px;font-size:14px}.smalllink{display:block;background:none;border:none;padding:13px 0;color:var(--dark);font-size:14px;text-decoration:underline;font-weight:700;text-align:left} [hidden]{display:none!important}.toast{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);background:#233c30;color:white;border-radius:12px;padding:12px 15px;max-width:92vw;font-size:14px;z-index:9}
+</style></head><body><main><header><b>2年生 統合ポータル</b><span class="badge">操作デモ v4</span></header>
+<section class="screen active" id="home"><div class="card"><h1>今日は何をしますか？</h1><p class="lead">予定をもとに、日案・連絡帳・音読カードにつなげます。</p><div class="stack"><button class="tile" onclick="show('mode')">予定を入れる・変更する<small>初期設定、行事の追加、時間割や進度の変更</small></button><button class="tile" onclick="show('product')">日案・連絡帳・音読カードを作る<small>登録済みの予定から必要なものを作成</small></button><button class="tile" onclick="show('consult')">その他・困ったことを相談する<small>文言の修正や、いつもと違うこともこちら</small></button></div><button class="smalllink" onclick="show('status')">初期設定の登録状況を見る</button><p class="muted">※これは架空の日付・教材・宿題を使った公開用デモです。入力内容は学校のスプレッドシートに反映されません。</p></div></section>
+<section class="screen" id="mode"><div class="card"><div id="modeSteps"></div><h2>何をしますか？</h2><div class="stack"><button class="tile" onclick="show('setup')">予定をまとめて登録する（初期設定）<small>最初に時間割・行事予定を登録するとき</small></button><button class="tile" onclick="show('when')">予定を追加・変更する<small>ふだんの授業変更・行事の追加</small></button><button class="tile" onclick="show('undo')">前の変更を取り消す<small>変更による進度・宿題のずれも見直す</small></button></div><div class="actions one"><button class="btn" onclick="show('home')">← 最初に戻る</button></div></div></section>
+<section class="screen" id="setup"><div class="card"><div id="setupSteps"></div><h2>初期設定の方法を選ぶ</h2><div class="stack"><button class="tile" onclick="selectSetup('時間割の写真');show('photo')">📷 時間割の写真から入力<small>既存の時間割表を利用</small></button><button class="tile" onclick="selectSetup('行事予定の写真');show('photo')">📷 行事予定の写真から入力<small>月間行事予定などを利用</small></button><button class="tile" onclick="selectSetup('時間割を手入力');show('timetable')">📅 時間割表から手入力<small>月〜金の表から教科を選択</small></button><button class="tile" onclick="selectSetup('行事予定を手入力');show('eventEntry')">✏️ 行事予定を手入力<small>日付と時間帯を選択</small></button></div><button class="smalllink" onclick="show('status')">登録状況を確認する</button><div class="actions one"><button class="btn" onclick="show('mode')">戻る</button></div></div></section>
+<section class="screen" id="photo"><div class="card"><div id="photoSteps"></div><h2 id="photoTitle">写真から入力する</h2><label>写真を選択する</label><input type="file" accept="image/*" id="photoFile"><div class="note warn">デモでは写真を自動読み取りしません。実際の学校の予定表や学校名が写った写真は送らず、画面の流れだけ試してください。</div><div class="actions"><button class="btn" onclick="show('setup')">戻る</button><button class="btn primary" onclick="photoDemo()">読み取り確認画面へ</button></div></div></section>
+<section class="screen" id="photoReview"><div class="card"><div id="reviewSteps"></div><h2>読み取り結果を確認</h2><p class="lead">写真から読み取った想定の、架空の入力例です。誤りがあれば直してから登録する設計です。</p><div class="note" id="photoDemoData">サンプル：月曜1限 国語／火曜2限 算数</div><label>修正する場合</label><textarea id="photoCorrection" placeholder="例：火曜2限は生活に変更"></textarea><div class="actions"><button class="btn" onclick="show('photo')">戻る</button><button class="btn primary" onclick="finishSetupPhoto()">確認して次へ</button></div></div></section>
+<section class="screen" id="timetable"><div class="card"><div id="tableSteps"></div><h2>時間割表から手入力</h2><p class="lead">曜日と時間を選び、教科を登録します。実運用では月〜金の表をまとめて入力できます。</p><label>曜日</label><select id="weekday"><option>月曜日</option><option>火曜日</option><option>水曜日</option><option>木曜日</option><option>金曜日</option></select><label>時間</label><select id="ttPeriod"><option>1時間目</option><option>2時間目</option><option>3時間目</option><option>4時間目</option><option>5時間目</option><option>6時間目</option></select><label>教科</label><select id="ttSubject"><option>国語</option><option>算数</option><option>生活</option><option>音楽</option><option>図画工作</option><option>体育</option><option>道徳</option><option>特別活動</option><option>その他</option></select><div class="actions"><button class="btn" onclick="show('setup')">戻る</button><button class="btn primary" onclick="finishTimetable()">登録内容を確認</button></div></div></section>
+<section class="screen" id="eventEntry"><div class="card"><div id="eventSteps"></div><h2>行事予定を手入力</h2><label>日付</label><input type="date" id="setupEventDate" value="2026-10-14"><label>時間帯</label><select id="setupEventTime"><option>1〜4時間目</option><option>午前</option><option>午後</option><option>終日</option><option>その他</option></select><label>行事名</label><input id="setupEventText" placeholder="例：校外学習"><div class="actions"><button class="btn" onclick="show('setup')">戻る</button><button class="btn primary" onclick="finishEvent()">登録内容を確認</button></div></div></section>
+<section class="screen" id="sheetReview"><div class="card"><div id="sheetSteps"></div><h2>先生専用シートへの登録内容を確認</h2><p class="lead">入力内容を確認してから、先生専用のスプレッドシートに登録する流れです。</p><div class="note" id="sheetPreview"></div><div class="tablewrap"><table><thead><tr><th>登録先（想定）</th><th>登録する情報</th></tr></thead><tbody id="sheetRows"></tbody></table></div><div class="note warn"><b>現在は操作デモです。</b><br>Googleスプレッドシートには接続していません。「登録」を押しても実際のファイルは書き換えません。</div><div class="actions"><button class="btn" onclick="show(sheetBack)">修正する</button><button class="btn primary" onclick="confirmSheetDemo()">この内容で登録（デモ）</button></div></div></section>
+<section class="screen" id="setupDone"><div class="card"><h2 id="setupDoneTitle">時間割を登録しました！</h2><div class="note" id="sheetDoneMessage">デモ内への登録が完了しました。実際のスプレッドシートは未変更です。</div><p class="lead" id="setupDoneLead">続けて行事予定を登録すると、行事で授業がなくなる時間も考慮して授業予定を組み立てられます。</p><div class="stack" id="setupNext"><button class="tile" onclick="selectSetup('行事予定の写真');show('photo')">📷 行事予定を写真から入力</button><button class="tile" onclick="selectSetup('行事予定を手入力');show('eventEntry')">✏️ 行事予定を手入力</button><button class="tile" onclick="show('home')">あとで登録する</button></div><button class="smalllink" onclick="show('status')">登録状況を見る</button></div></section>
+<section class="screen" id="status"><div class="card"><h2>初期設定の登録状況</h2><div class="progress" id="setupStatus"></div><p class="muted">表示はこのデモ内で選んだ操作の状態です。実際のスプレッドシートを確認した結果ではありません。</p><div class="actions"><button class="btn" onclick="show('home')">ホーム</button><button class="btn primary" onclick="show('setup')">続きを登録する</button></div></div></section>
+<section class="screen" id="when"><div class="card"><div id="whenSteps"></div><h2>いつの予定ですか？</h2><label>日付</label><input type="date" id="date" value="2026-10-07"><label>時間</label><div class="stack"><label class="option"><input type="radio" name="timeType" value="single" checked onchange="toggleRange()">1時間を選ぶ</label><label class="option"><input type="radio" name="timeType" value="range" onchange="toggleRange()">複数時間を選ぶ</label><label class="option"><input type="radio" name="timeType" value="allday" onchange="toggleRange()">終日</label></div><div id="singleTime"><label>何時間目</label><select id="period"><option>1時間目</option><option>2時間目</option><option selected>3時間目</option><option>4時間目</option><option>5時間目</option><option>6時間目</option></select></div><div class="cols" id="rangeTime" hidden><div><label>開始</label><select id="from"><option>1時間目</option><option>2時間目</option><option>3時間目</option><option>4時間目</option><option>5時間目</option><option>6時間目</option></select></div><div><label>終了</label><select id="to"><option>1時間目</option><option>2時間目</option><option>3時間目</option><option selected>4時間目</option><option>5時間目</option><option>6時間目</option></select></div></div><label>内容（教科・行事を選ぶ）</label><div class="cols" id="subjects"></div><div id="detailWrap" hidden><label id="detailLabel">内容を入力</label><input id="detail" placeholder="例：校外学習"></div><label>どんな変更ですか？</label><select id="changeType"><option>この時間の授業を行事・別の活動に変更する</option><option>授業を別の時間に移動する</option><option>授業を追加する</option><option>行事を追加する（授業は変えない）</option><option>その他・相談して決める</option></select><div class="actions"><button class="btn" onclick="show('mode')">戻る</button><button class="btn primary" onclick="toImpact()">影響を確認する</button></div></div></section>
+<section class="screen" id="impact"><div class="card"><div id="impactSteps"></div><h2>影響を整理しました</h2><div class="note" id="impactSummary"></div><div class="actions"><button class="btn" onclick="show('when')">戻る</button><button class="btn primary" onclick="show('questions')">必要な確認へ</button></div></div></section>
+<section class="screen" id="questions"><div class="card"><div id="questionSteps"></div><h2>確認が必要なこと</h2><div class="note"><b>変更日の宿題（架空の例）</b><div id="todayHomework"></div></div><label>宿題はどうしますか？</label><select id="homework"><option>進度に合わせて変更する</option><option>現在の宿題をそのまま使う</option><option>今回は出さない</option><option>相談して決める</option></select><label>音読カードはどうしますか？</label><select id="ondoku"><option>進度に合わせて変更する</option><option>そのまま</option><option>今回は使わない</option><option>相談して決める</option></select><button class="smalllink" onclick="show('overview')">📅 前後の宿題・進度を見る（試作）</button><button class="btn ghost" style="width:100%;margin-top:8px" onclick="toggleExtra()">＋ ほかに変更・相談したいことがある</button><div id="extraWrap" hidden><label>変更・相談したいこと</label><textarea id="extra" placeholder="例：音読カードの文言も調整したい"></textarea></div><div class="actions"><button class="btn" onclick="show('impact')">戻る</button><button class="btn primary" onclick="fillConfirm();show('confirm')">最終確認へ</button></div></div></section>
+<section class="screen" id="overview"><div class="card"><h2>宿題・進度を確認する</h2><p class="lead">変更日の前後を先に表示。詳しく見たいときだけ範囲を広げられます。</p><div class="tabs"><button id="tabWeek" onclick="overview('week')">前後1週間</button><button id="tabMonth" onclick="overview('month')">月間</button><button id="tabTerm" onclick="overview('term')">2学期全体</button></div><div class="tablewrap"><table><thead><tr><th>日付</th><th>国語の予定</th><th>宿題</th></tr></thead><tbody id="overviewRows"></tbody></table></div><p class="muted">ダミーの一覧です。2学期全体の表示は画面切替の見本で、実際の2学期データは未接続です。</p><button class="smalllink" onclick="show('compare')">変更前後を比較する（試作）→</button><div class="actions one"><button class="btn primary" onclick="show('questions')">宿題の確認に戻る</button></div></div></section>
+<section class="screen" id="compare"><div class="card"><h2>変更前後を比較</h2><p class="lead">進度変更に応じた宿題の変化を見る画面の試作です。</p><div class="tablewrap"><table><thead><tr><th>日付</th><th>変更前</th><th>変更後（例）</th></tr></thead><tbody><tr><td>10/7</td><td>かんノート12</td><td>変更なし</td></tr><tr><td>10/8</td><td>かんド12</td><td>かんノート12</td></tr><tr><td>10/9</td><td>かんノート13</td><td>かんド12</td></tr></tbody></table></div><div class="note warn">これは表示方法を試すための例であり、実データから計算した変更結果ではありません。</div><div class="actions"><button class="btn" onclick="show('overview')">一覧に戻る</button><button class="btn primary" onclick="show('questions')">確認に戻る</button></div></div></section>
+<section class="screen" id="confirm"><div class="card"><div id="confirmSteps"></div><h2>この内容で反映しますか？</h2><div class="note" id="confirmText"></div><p class="muted">このデモの「反映」は画面内の確認のみです。学校のデータは更新しません。</p><div class="actions"><button class="btn" onclick="show('questions')">修正する</button><button class="btn primary" onclick="finishChange()">OK・反映する</button></div></div></section>
+<section class="screen" id="changed"><div class="card"><h2>確認が完了しました</h2><div class="note">デモの操作履歴に保存しました。実際のスプレッドシートは変更していません。</div><div class="actions"><button class="btn" onclick="show('home')">ホームへ</button><button class="btn primary" onclick="show('undo')">変更を確認・取り消す</button></div></div></section>
+<section class="screen" id="undo"><div class="card"><h2>前の変更を取り消す</h2><div id="history" class="note"></div><p class="lead">本番では予定だけでなく、影響した進度・宿題も一緒に再計算し、結果を確認してから確定します。</p><div class="actions"><button class="btn" onclick="show('mode')">戻る</button><button class="btn primary" onclick="previewUndo()">取り消しの確認へ</button></div></div></section>
+<section class="screen" id="undoConfirm"><div class="card"><h2>取り消し後の確認</h2><div id="undoText" class="note"></div><div class="note warn">本番の関連データ再計算は未実装。デモでは操作履歴を戻す流れのみ確認できます。</div><div class="actions"><button class="btn" onclick="show('undo')">やめる</button><button class="btn primary" onclick="undoDemo()">取り消す（デモ）</button></div></div></section>
+<section class="screen" id="product"><div class="card"><div id="productSteps"></div><h2>何を作りますか？</h2><div class="stack"><button class="tile" onclick="setProduct('日案')">日案を作る</button><button class="tile" onclick="setProduct('連絡帳')">連絡帳を作る</button><button class="tile" onclick="setProduct('音読カード')">音読カードを作る</button></div><div class="actions one"><button class="btn" onclick="show('home')">戻る</button></div></div></section>
+<section class="screen" id="productDate"><div class="card"><div id="productDateSteps"></div><h2><span id="productName">日案</span>はいつの分ですか？</h2><label>日付</label><input type="date" id="productDateInput" value="2026-10-07"><div class="actions"><button class="btn" onclick="show('product')">戻る</button><button class="btn primary" onclick="show('productCheck')">次へ</button></div></div></section>
+<section class="screen" id="productCheck"><div class="card"><div id="productCheckSteps"></div><h2>作成に使う情報</h2><div class="note">時間割・行事予定・教科進度・宿題・教材を参照し、不足があれば確認する設計です。</div><div class="note warn">このデモはスプレッドシート未接続のため、最新情報を照合・作成する処理は行いません。</div><div class="actions"><button class="btn" onclick="show('productDate')">戻る</button><button class="btn primary" onclick="fillProduct();show('productConfirm')">最終確認へ</button></div></div></section>
+<section class="screen" id="productConfirm"><div class="card"><div id="productConfirmSteps"></div><h2>この内容で作りますか？</h2><div class="note" id="productConfirmText"></div><div class="actions"><button class="btn" onclick="show('productCheck')">修正</button><button class="btn primary" onclick="toast('デモ：実ファイルの作成は未実装です')">OK・作成する</button></div><button class="smalllink" onclick="show('home')">ホームへ戻る</button></div></section>
+<section class="screen" id="consult"><div class="card"><h2>その他・困ったことを相談する</h2><p class="lead">話し始めるきっかけだけ用意しています。自由に入力しても大丈夫。</p><div class="stack"><button class="tile" onclick="fillConsult('音読カードの文言や見た目を変更したい')">文言・見た目を変えたい</button><button class="tile" onclick="fillConsult('授業のずれや進度について相談したい')">授業のずれを相談したい</button><button class="tile" onclick="fillConsult('普段と違う処理をしたい')">いつもと違うことをしたい</button></div><label>相談内容</label><textarea id="consultText" placeholder="気になることを、そのまま入力"></textarea><div class="actions"><button class="btn" onclick="show('home')">戻る</button><button class="btn primary" onclick="toast('デモ：会話への送信機能は未実装です')">相談する</button></div></div></section>
+</main><script>
+const $=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let subject='',setupKind='',product='日案',historyEntry=null,sheetBack='setup',sheetKind='',sheetData='';let done={timetable:false,events:false};
+try{const d=JSON.parse(sessionStorage.getItem('portal-demo-v3')||'{}');if(d.done)done=d.done;if(d.historyEntry)historyEntry=d.historyEntry}catch(e){}
+function persist(){try{sessionStorage.setItem('portal-demo-v3',JSON.stringify({done,historyEntry}))}catch(e){}}
+function show(id){document.querySelectorAll('.screen').forEach(el=>el.classList.toggle('active',el.id===id));if(id==='status')status();if(id==='undo')history();if(id==='overview')overview('week');window.scrollTo(0,0)}
+function step(id,current,total,caption){$(id).innerHTML='<div class="step-caption"><span>'+esc(caption)+' '+current+' / '+total+'</span><span>'+(total-current?'あと'+(total-current):'最終確認')+'</span></div><div class="steps">'+Array.from({length:total},(_,i)=>'<span class="ball '+(i<current?'on':'')+'">'+(i+1)+'</span>'+(i<total-1?'<span class="line '+(i<current-1?'on':'')+'"></span>':'')).join('')+'</div>'}
+function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2800)}
+function selectSetup(k){setupKind=k;$('photoTitle').textContent=k+'から入力';$('photoDemoData').textContent=k.includes('時間割')?'架空の読み取り例：月曜1限 国語／火曜2限 算数':'架空の読み取り例：10月14日 午前 校外学習'}
+function photoDemo(){if($('photoFile').files.length===0){toast('画面の流れを試すにはダミー画像を選択してください');return}show('photoReview')}
+function prepareSheetReview(kind,data,back){
+  sheetKind=kind;sheetData=data;sheetBack=back;
+  $('sheetPreview').textContent=data;
+  $('sheetRows').innerHTML='<tr><td>'+esc(kind==='時間割'?'時間割シート':'行事予定シート')+'</td><td>'+esc(data)+'</td></tr>';
+  show('sheetReview');
 }
-function setPlanMode(v){planMode=v}
-function setProduct(v){product=v;document.getElementById('productName').textContent=v}
-function prefill(v){document.getElementById('consultText').value=v}
-function fillPlanConfirm(){
-  const mode = planMode==='new' ? '新しく予定を入れる' : '予定を変更する';
-  const date=document.getElementById('date').value;
-  const period=document.getElementById('period').value;
-  const event=document.getElementById('event').value;
-  const homework=document.getElementById('homework').value;
-  const ondoku=document.getElementById('ondoku').value;
-  document.getElementById('planConfirmText').innerHTML =
-    '操作：'+mode+'<br>'+
-    '日付：'+date+'<br>'+
-    '時間：'+period+'<br>'+
-    '内容：'+event+'<br>'+
-    '進度：1時間後ろへずらす案<br>'+
-    '宿題：'+homework+'<br>'+
-    '音読カード：'+ondoku+'<br>'+
-    '日案・連絡帳：変更内容を反映';
+function finishSetupPhoto(){
+  const kind=setupKind.includes('時間割')?'時間割':'行事予定';
+  const corrections=$('photoCorrection').value.trim();
+  const sample=kind==='時間割'?'月曜1限：国語／火曜2限：算数（架空の読み取り例）':'10月14日 午前：校外学習（架空の読み取り例）';
+  prepareSheetReview(kind,sample+(corrections?'／修正指示：'+corrections:''),'photoReview');
 }
-function fillProductConfirm(){
-  const date=document.getElementById('productDateInput').value;
-  document.getElementById('productConfirmText').innerHTML =
-    '作成物：'+product+'<br>'+
-    '対象日：'+date+'<br>'+
-    '予定・時間割・進度・宿題を反映<br>'+
-    '2年生の共通教材を参照<br>'+
-    '先生のOK後に作成';
+function finishTimetable(){
+  prepareSheetReview('時間割',$('weekday').value+' '+$('ttPeriod').value+'：'+$('ttSubject').value,'timetable');
 }
-</script>
-</body>
-</html>
+function finishEvent(){
+  if(!$('setupEventText').value.trim()){toast('行事名を入力してください');return}
+  prepareSheetReview('行事予定',$('setupEventDate').value+' '+$('setupEventTime').value+'：'+$('setupEventText').value.trim(),'eventEntry');
+}
+function confirmSheetDemo(){
+  setupKind=sheetKind;
+  if(sheetKind==='時間割')done.timetable=true;else done.events=true;
+  persist();setupDone();
+}
+function setupDone(){let timetable=setupKind.includes('時間割');$('setupDoneTitle').textContent=timetable?'時間割の登録を確認しました！':'行事予定の登録を確認しました！';$('sheetDoneMessage').textContent='デモ内の登録：'+sheetData+'。実際のGoogleスプレッドシートは変更していません。';$('setupDoneLead').textContent=timetable?'続けて行事予定を登録すると、行事で授業がなくなる時間も考慮して授業予定を組み立てられます。':'時間割と行事予定を組み合わせて、授業予定を組み立てられます。';$('setupNext').hidden=!timetable;show('setupDone')}
+function status(){$('setupStatus').innerHTML='<div>'+(done.timetable?'✅':'⬜')+' 時間割：'+(done.timetable?'登録済み（デモ）':'未登録')+'</div><div>'+(done.events?'✅':'⬜')+' 行事予定：'+(done.events?'登録済み（デモ）':'未登録')+'</div><div>⬜ 授業予定：未作成（実装時に時間割・行事を統合）</div>'}
+function toggleRange(){let k=document.querySelector('input[name=timeType]:checked').value;$('singleTime').hidden=k!=='single';$('rangeTime').hidden=k!=='range'}
+const subjects=['国語','社会','算数','理科','生活','音楽','図画工作','家庭','体育','外国語（外国語活動）','行事','その他'];$('subjects').innerHTML=subjects.map(s=>'<button type="button" class="subject" data-subject="'+esc(s)+'" onclick="chooseSubject(this)">'+esc(s)+'</button>').join('');
+function chooseSubject(el){subject=el.dataset.subject;document.querySelectorAll('.subject').forEach(e=>e.classList.toggle('on',e===el));$('detailWrap').hidden=!['行事','その他'].includes(subject);$('detailLabel').textContent=subject==='行事'?'行事名を入力':'内容を入力';$('detail').placeholder=subject==='行事'?'例：校外学習':'例：学級活動'}
+function timeLabel(){const k=document.querySelector('input[name=timeType]:checked').value;return k==='allday'?'終日':k==='range'?$('from').value+'〜'+$('to').value:$('period').value}
+function toImpact(){if(!subject){toast('教科・行事を選んでください');return}if(['行事','その他'].includes(subject)&&!$('detail').value.trim()){toast('内容を入力してください');return}if(document.querySelector('input[name=timeType]:checked').value==='range'&&$('from').selectedIndex>$('to').selectedIndex){toast('終了時刻を開始時刻以降にしてください');return}const typ=$('changeType').value;const noShift=typ.includes('授業は変えない');$('impactSummary').innerHTML='<b>今回の変更</b><br>'+esc($('date').value)+'　'+esc(timeLabel())+'<br>'+esc(subject)+( $('detailWrap').hidden?'':'：'+esc($('detail').value))+'<br><br><b>授業・進度</b><br>'+(noShift?'授業は変更しない案。':'予定に重なる授業を確認し、必要に応じて後続の進度を調整する案。')+'<br><b>宿題・音読カード</b><br>現在の予定を見ながら変更するか先生に確認。<br><b>日案・連絡帳</b><br>確定した内容を反映する想定。<br><span class="muted">※実際の進度計算は未接続です。</span>';$('todayHomework').textContent=$('date').value+'：かんノート12・音読（ダミー）';show('impact')}
+function toggleExtra(){$('extraWrap').hidden=!$('extraWrap').hidden}
+const rows=[['10/5','国語：説明文','かんノート11'],['10/6','国語：説明文','音読'],['10/7','行事（仮）','かんノート12'],['10/8','国語：説明文','かんド12'],['10/9','国語：説明文','かんノート13'],['10/13','国語：まとめ','音読'],['10/14','校外学習（仮）','なし']];
+function overview(type){['week','month','term'].forEach(t=>$('tab'+t[0].toUpperCase()+t.slice(1)).classList.toggle('on',t===type));let a=type==='week'?rows.slice(0,5):type==='month'?rows:rows.concat([['11月（例）','進度一覧','月間の宿題'],['12月（例）','進度一覧','月間の宿題']]);$('overviewRows').innerHTML=a.map(row=>'<tr>'+row.map(c=>'<td>'+esc(c)+'</td>').join('')+'</tr>').join('')}
+function fillConfirm(){let detail=$('detailWrap').hidden?'':'：'+$('detail').value;let extra=$('extraWrap').hidden?'':$('extra').value.trim();$('confirmText').innerHTML='<b>予定</b>：'+esc($('date').value)+'　'+esc(timeLabel())+'<br><b>内容</b>：'+esc(subject+detail)+'<br><b>変更の種類</b>：'+esc($('changeType').value)+'<br><b>宿題</b>：'+esc($('homework').value)+'<br><b>音読カード</b>：'+esc($('ondoku').value)+(extra?'<br><b>追加の相談</b>：'+esc(extra):'')+'<br><b>日案・連絡帳</b>：確定内容を反映する想定';}
+function finishChange(){historyEntry={date:$('date').value,time:timeLabel(),description:subject+( $('detailWrap').hidden?'':'：'+$('detail').value)};persist();show('changed')}
+function history(){$('history').textContent=historyEntry?historyEntry.date+' '+historyEntry.time+' '+historyEntry.description:'このデモで確定した変更はまだありません。'}
+function previewUndo(){if(!historyEntry){toast('取り消す変更がありません');return}$('undoText').textContent=historyEntry.date+' '+historyEntry.time+' '+historyEntry.description+' を取り消す想定です。';show('undoConfirm')}
+function undoDemo(){historyEntry=null;persist();toast('デモ内の変更履歴を取り消しました');show('mode')}
+function setProduct(v){product=v;$('productName').textContent=v;show('productDate')}
+function fillProduct(){$('productConfirmText').textContent='成果物：'+product+'／対象日：'+$('productDateInput').value+'。登録済みの時間割・行事・進度・宿題・教材を照合して作成する想定です。'}
+function fillConsult(v){$('consultText').value=v}
+step('modeSteps',1,5,'予定');step('setupSteps',2,6,'初期設定');step('photoSteps',3,6,'初期設定');step('reviewSteps',4,6,'初期設定');step('tableSteps',3,6,'初期設定');step('eventSteps',3,6,'初期設定');step('sheetSteps',5,6,'初期設定');step('whenSteps',2,5,'予定変更');step('impactSteps',3,5,'予定変更');step('questionSteps',4,5,'予定変更');step('confirmSteps',5,5,'予定変更');step('productSteps',1,4,'成果物');step('productDateSteps',2,4,'成果物');step('productCheckSteps',3,4,'成果物');step('productConfirmSteps',4,4,'成果物');
+</script></body></html>
